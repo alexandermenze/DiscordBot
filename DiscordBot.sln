@@ -13,6 +13,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2_App", "2_App", "{001DAF5B
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DiscordBot.Domain", "DiscordBot.Domain\DiscordBot.Domain.csproj", "{32FD80CA-6435-4A38-AF97-453EAC7B22D2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DiscordBot.Extensions", "DiscordBot.Extensions\DiscordBot.Extensions.csproj", "{4002C12F-01A5-4AC5-A2B5-7908C3DE7826}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{32FD80CA-6435-4A38-AF97-453EAC7B22D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{32FD80CA-6435-4A38-AF97-453EAC7B22D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{32FD80CA-6435-4A38-AF97-453EAC7B22D2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4002C12F-01A5-4AC5-A2B5-7908C3DE7826}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4002C12F-01A5-4AC5-A2B5-7908C3DE7826}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4002C12F-01A5-4AC5-A2B5-7908C3DE7826}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4002C12F-01A5-4AC5-A2B5-7908C3DE7826}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -34,6 +40,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{DE3E46DB-05AF-46A8-B8EA-57AF839F498A} = {001DAF5B-4695-4D78-BF62-207B80E96313}
 		{32FD80CA-6435-4A38-AF97-453EAC7B22D2} = {813F9CAE-68DB-4FB9-AFED-7064B2ECCC42}
+		{4002C12F-01A5-4AC5-A2B5-7908C3DE7826} = {001DAF5B-4695-4D78-BF62-207B80E96313}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4C44E9E7-BA62-4B3F-BDBE-8AB18B8C59FF}

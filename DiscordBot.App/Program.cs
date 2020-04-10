@@ -1,51 +1,48 @@
-﻿using Discord;
-using Discord.WebSocket;
+﻿using DiscordBot.App.Bootstrapper;
+using DiscordBot.App.DependencyInjection;
+using DiscordBot.App.Services;
+using DiscordBot.Domain.Interfaces;
+using DiscordBot.Extensions;
 using System;
 using System.Threading.Tasks;
+using Unity;
 
 namespace DiscordBot.App
 {
     internal class Program
     {
-        private const string DiscordTokenKey = "DISCORD_TOKEN";
-
         internal static async Task Main(string[] args)
         {
             Console.WriteLine("Starting...");
 
-            var client = new DiscordSocketClient();
-            client.Log += Client_OnLog;
-            client.MessageReceived += Client_OnMessageReceived;
+            try
+            {
+                SetupDependencies();
+                await SetupDiscord().ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Exception occured during start: {ex.GetInnermostException().Message}");
+                Console.WriteLine(ex);
+                return;
+            }
 
-            await client.LoginAsync(TokenType.Bot, GetDiscordToken()).ConfigureAwait(true);
-            await client.StartAsync().ConfigureAwait(true);
-
-            await Task.Delay(-1);
+            Console.WriteLine("Press enter to exit...");
+            Console.ReadLine();
         }
 
-        private static Task Client_OnMessageReceived(SocketMessage arg)
+        private static void SetupDependencies()
         {
-            Console.WriteLine($"Message: {arg.Content}");
-            return Task.CompletedTask;
+            var container = Container.Default;
+
+            container.RegisterType<IEnvironmentService, EnvironmentService>();
+            container.RegisterType<DiscordChatService>(TypeLifetime.Singleton);
+            container.RegisterType<DiscordBootstrapper>();
         }
 
-        private static Task Client_OnLog(LogMessage arg)
+        private static async Task SetupDiscord()
         {
-            Console.WriteLine($"Log: {arg.Message}");
-            return Task.CompletedTask;
-        }
-
-        private static string GetDiscordToken()
-        {
-            var token = Environment.GetEnvironmentVariable(DiscordTokenKey, EnvironmentVariableTarget.Process);
-
-            if (token == null)
-                token = Environment.GetEnvironmentVariable(DiscordTokenKey, EnvironmentVariableTarget.User);
-
-            if (token == null)
-                token = Environment.GetEnvironmentVariable(DiscordTokenKey, EnvironmentVariableTarget.Machine);
-
-            return token;
+            await Container.Default.Resolve<DiscordBootstrapper>().Connect().ConfigureAwait(false);
         }
     }
 }
