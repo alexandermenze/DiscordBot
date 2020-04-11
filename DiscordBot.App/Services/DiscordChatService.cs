@@ -4,15 +4,19 @@ using DiscordBot.Domain.Exceptions;
 using DiscordBot.Domain.Interfaces;
 using DiscordBot.Domain.ValueTypes;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace DiscordBot.App.Services
 {
     public class DiscordChatService : IChatService
     {
+        private const string CommandPrefix = "!";
+
         private DiscordSocketClient _client;
 
         public event EventHandler<ChatMessageEventArgs> ChatMessageReceived;
+        public event EventHandler<ChatCommandEventArgs> ChatCommandReceived;
 
         public async Task Connect(string token)
         {
@@ -35,8 +39,30 @@ namespace DiscordBot.App.Services
 
         private Task Client_OnMessageReceived(SocketMessage message)
         {
+            if (HandleCommand(message))
+                return Task.CompletedTask;
+
             ChatMessageReceived?.Invoke(this, new ChatMessageEventArgs { Message = message.Content });
             return Task.CompletedTask;
+        }
+
+        private bool HandleCommand(SocketMessage message)
+        {
+            if (!message.Content.StartsWith(CommandPrefix))
+                return false;
+
+            var command = message.Content.Substring(1);
+            var commandParts = command.Split((char[])null, StringSplitOptions.RemoveEmptyEntries);
+            ChatCommandReceived?.Invoke(this,
+                new ChatCommandEventArgs
+                {
+                    ChatMessage = message,
+                    CommandText = command,
+                    CommandName = commandParts[0],
+                    CommandArguments = commandParts.Skip(1)
+                });
+
+            return true;
         }
     }
 }
