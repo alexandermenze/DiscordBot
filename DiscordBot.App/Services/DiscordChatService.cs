@@ -10,9 +10,9 @@ namespace DiscordBot.App.Services
 {
     public class DiscordChatService : IChatService
     {
-        public event EventHandler<ChatMessageEventArgs> ChatMessageReceived;
-
         private DiscordSocketClient _client;
+
+        public event EventHandler<ChatMessageEventArgs> ChatMessageReceived;
 
         public async Task Connect(string token)
         {
@@ -31,12 +31,11 @@ namespace DiscordBot.App.Services
         }
 
         private Task Client_OnLog(LogMessage arg)
-        {
-            return Task.CompletedTask;
-        }
+            => Task.CompletedTask;
 
-        private Task Client_OnMessageReceived(SocketMessage arg)
+        private Task Client_OnMessageReceived(SocketMessage message)
         {
+            ChatMessageReceived?.Invoke(this, new ChatMessageEventArgs { Message = message.Content });
             return Task.CompletedTask;
         }
     }
