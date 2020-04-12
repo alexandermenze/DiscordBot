@@ -44,9 +44,14 @@ namespace DiscordBot.App.Bootstrapper
 
         private async void OnChatCommandReceived(object sender, ChatCommandEventArgs args)
         {
-            if (string.Compare(args.CommandName, "pinghost", StringComparison.OrdinalIgnoreCase) != 0)
-                return;
+            if (string.Compare(args.CommandName, "pinghost", StringComparison.OrdinalIgnoreCase) == 0)
+                await HandlePingHost(args).ConfigureAwait(false);
+            else if (string.Compare(args.CommandName, "minecraft", StringComparison.OrdinalIgnoreCase) == 0)
+                await HandleMinecraft(args).ConfigureAwait(false);
+        }
 
+        private async Task HandlePingHost(ChatCommandEventArgs args)
+        {
             if (args.CommandArguments.Count() < 1)
                 return;
 
@@ -66,6 +71,11 @@ namespace DiscordBot.App.Bootstrapper
             }
 
             await args.ChatMessage.Channel.SendMessageAsync(responseMessage).ConfigureAwait(false);
+        }
+
+        private async Task HandleMinecraft(ChatCommandEventArgs args)
+        {
+
         }
     }
 }
